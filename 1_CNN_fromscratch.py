@@ -39,9 +39,8 @@ class StrideOperator(object):
 		"""
 		Returns the indices for a single slice of the input, which in case of convolution 
 		will be multiplied by the convolution filter, the sum of which will be one entry 
-		in the convolution
-		@params:
-			- begin: can have shape (...,n,m), where ... will be prefixed to the indices 
+		in the convolution.
+		'begin' can have shape (...,n,m), where ... will be prefixed to the indices) 
 		"""
 		inds=[]
 		for i in range(begin[-2],begin[-2]+self.dimCut[0]):

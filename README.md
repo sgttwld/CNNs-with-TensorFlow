@@ -1,5 +1,5 @@
 # CNNs-with-TensorFlow
-Different levels of abstraction in convolutional neural network implementations with TensorFlow.
+Differently abstract implementations of an exemplary convolutional neural network with TensorFlow.
 
 * [Convolutional layer from scratch](https://github.com/sgttwld/CNNs-with-tensorflow/blob/master/1_CNN_fromscratch.py): Convolutional neural network implementation with convolutional and pooling layers built from scratch with core TensorFlow.
 

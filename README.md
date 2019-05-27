@@ -1,7 +1,6 @@
 # CNNs-with-tensorflow
 Different levels of abstraction in convolutional neural network implementations with tensorflow
 
-
 * [Convolutional layer from scratch](https://github.com/sgttwld/CNNs-with-tensorflow/blob/master/1_CNN_fromscratch.py): Convolutional neural network implementation with convolutional and pooling layers built from scratch with core tensorflow.
 
 * [Low-level tensorflow](https://github.com/sgttwld/CNNs-with-tensorflow/blob/master/2_CNN_lowlevel.py): Convolutional neural network using `tf.nn.conv2d` and `tf.nn.avg_pool` with explicit definitions of weights and biases.

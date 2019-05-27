@@ -5,6 +5,6 @@ Different levels of abstraction in convolutional neural network implementations 
 
 * [Low-level tensorflow](https://github.com/sgttwld/CNNs-with-tensorflow/blob/master/2_CNN_lowlevel.py): Convolutional neural network using `tf.nn.conv2d` and `tf.nn.avg_pool` with explicit definitions of weights and biases.
 
-* [Mid-level tensorflow](https://github.com/sgttwld/CNNs-with-tensorflow/blob/master/3_CNN_midlevel.py): Convolutional neural network using `tf.keras.layers.Conv2D` and `tf.keras.layers.AvgPool2D` (weights and biases are managed by `tf.keras.layers`)
+* [Mid-level tensorflow](https://github.com/sgttwld/CNNs-with-tensorflow/blob/master/3_CNN_midlevel.py): Convolutional neural network using `tf.keras.layers` (weights and biases are managed for us)
 
-* [High-level tensorflow](https://github.com/sgttwld/CNNs-with-tensorflow/blob/master/4_CNN_highlevel.py): Convolutional neural network using `tf.keras.model.Sequential`.
+* [High-level tensorflow](https://github.com/sgttwld/CNNs-with-tensorflow/blob/master/4_CNN_highlevel.py): Convolutional neural network using `tf.keras.model.Sequential` (everything is managed for us).

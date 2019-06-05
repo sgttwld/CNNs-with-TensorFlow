@@ -180,7 +180,7 @@ p = tf.nn.softmax(logits)
 obj = -tf.reduce_mean(Y_1hot*tf.log(p)) 	# cross entropy
 
 ## classification error (for evaluation)
-percent_corr = tf.reduce_mean(tf.cast(tf.equal(tf.argmax(p,axis=1),Y),tf.float64))
+percent_corr = tf.reduce_mean(tf.cast(tf.equal(tf.argmax(p,axis=1),Y),tf.float32))
 err = 1 - percent_corr
 
 ## optimizer

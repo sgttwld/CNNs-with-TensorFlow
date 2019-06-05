@@ -11,12 +11,11 @@ import math, os, sys, time
 import matplotlib.pyplot as plt
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 
-## progress bar
-def print_progress(i, tot, obj, bar_length=30, wait=False):
+## custom progress bar
+def print_progress(i, tot, acc, acc_str, bar_length=30, wait=False):
 	filled_length = int(round(bar_length * i / tot))
-	# bar = '█' * filled_length + '-' * (bar_length - filled_length)
 	bar = '|' * filled_length + '-' * (bar_length - filled_length)
-	sys.stdout.write('\r%s/%s |%s| %s %s' % (i, tot, bar, "obj:", obj)),
+	sys.stdout.write('\r%s/%s |%s| %s %s' % (i, tot, bar, acc_str+':', acc)),
 	if i == tot-1 and not(wait):
 		sys.stdout.write('\n')
 	sys.stdout.flush()
@@ -153,16 +152,14 @@ dimP = Pool.dimOut			# = (numF,12,12), output of pooling layer
 dimFLAT = np.prod(dimP) 	# = numF*12*12, number of entries in the flattened layer
 
 ## weights and biases
-F = tf.get_variable('conv_weights', (numF,*dimF), tf.float64, tf.glorot_uniform_initializer())
-# b = tf.get_variable('weight_bias', (numF), tf.float64, tf.zeros_initializer())
-W = tf.get_variable('dense_weights',(dimFLAT,dimOUT), tf.float64)
-b = tf.get_variable('dense_bias', (dimOUT), tf.float64, tf.zeros_initializer())
-
+F = tf.get_variable('conv_weights', (numF,*dimF), tf.float32, tf.glorot_uniform_initializer())
+W = tf.get_variable('dense_weights',(dimFLAT,dimOUT), tf.float32)
+b = tf.get_variable('dense_bias', (dimOUT), tf.float32, tf.zeros_initializer())
 
 ## placeholders for data
-X = tf.placeholder(tf.float64,[None,dimIN[0],dimIN[1]])
+X = tf.placeholder(tf.float32,[None,dimIN[0],dimIN[1]])
 Y = tf.placeholder(tf.int64,[None])
-Y_1hot = tf.one_hot(Y,dimOUT,dtype=tf.float64)
+Y_1hot = tf.one_hot(Y,dimOUT,dtype=tf.float32)
 
 ## convolutional layer
 C = tf.nn.relu(tf.map_fn(lambda A : Conv.conv(A,F), X))
@@ -183,7 +180,7 @@ p = tf.nn.softmax(logits)
 obj = -tf.reduce_mean(Y_1hot*tf.log(p)) 	# cross entropy
 
 ## classification error (for evaluation)
-percent_corr = tf.reduce_sum(tf.cast(tf.equal(tf.argmax(p,axis=1),Y),tf.int64))/len(x_test)
+percent_corr = tf.reduce_mean(tf.cast(tf.equal(tf.argmax(p,axis=1),Y),tf.float64))
 err = 1 - percent_corr
 
 ## optimizer
@@ -202,18 +199,15 @@ with tf.Session() as sess:
 
 	for n in range(0,numEp):
 		numBatches = math.floor(len(x_train)/bs)
-
-		print('Ep:',n)
-		t0 = time.time()			
-		for b in range(0,numBatches):
-			batch_X = x_train[b*bs:(b+1)*bs]
-			batch_Y = y_train[b*bs:(b+1)*bs]
-			sess.run(train_op,feed_dict={X: batch_X, Y: batch_Y})
-			obj_curr = round(obj.eval(session=sess,feed_dict={X:batch_X,Y:batch_Y}),6)
-			print_progress(b, numBatches, obj_curr , wait=True)
+		t0, acc = time.time(), 0
 		
-		t1 = time.time()
-		T = round(t1-t0,2)
-		err_curr = err.eval(session=sess,feed_dict={X:x_test,Y:y_test})
+		print('Ep:',n)
+		for batch in range(0,numBatches):
+			batch_X, batch_Y = x_train[batch*bs:(batch+1)*bs], y_train[batch*bs:(batch+1)*bs]
+			sess.run(train_op,feed_dict={X: batch_X, Y: batch_Y})
+			acc = (batch * acc + percent_corr.eval(session=sess,feed_dict={X:batch_X,Y:batch_Y}))/(batch+1)
+			print_progress(batch, numBatches, round(acc,5), acc_str='acc', wait=True)
+		T = round(time.time()-t0,2)
+		acc_test = percent_corr.eval(session=sess,feed_dict={X:x_test,Y:y_test})
 		sys.stdout.write(' time: %s test-acc: %s (error: %s%%)\n' % 
 						(T, round(acc_test,3), round((1-acc_test)*100,3)))

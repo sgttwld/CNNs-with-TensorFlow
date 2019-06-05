@@ -98,11 +98,11 @@ with tf.Session() as sess:
 		t0, acc = time.time(), 0
 		
 		print('Ep:',n)
-		for b in range(0,numBatches):
-			batch_X, batch_Y = x_train[b*bs:(b+1)*bs], y_train[b*bs:(b+1)*bs]
+		for batch in range(0,numBatches):
+			batch_X, batch_Y = x_train[batch*bs:(batch+1)*bs], y_train[batch*bs:(batch+1)*bs]
 			sess.run(train_op,feed_dict={X: batch_X, Y: batch_Y})
-			acc = (b * acc + percent_corr.eval(session=sess,feed_dict={X:batch_X,Y:batch_Y}))/(b+1)
-			print_progress(b, numBatches, round(acc,5), acc_str='acc', wait=True)
+			acc = (batch * acc + percent_corr.eval(session=sess,feed_dict={X:batch_X,Y:batch_Y}))/(batch+1)
+			print_progress(batch, numBatches, round(acc,5), acc_str='acc', wait=True)
 		T = round(time.time()-t0,2)
 		acc_test = percent_corr.eval(session=sess,feed_dict={X:x_test,Y:y_test})
 		sys.stdout.write(' time: %s test-acc: %s (error: %s%%)\n' % 

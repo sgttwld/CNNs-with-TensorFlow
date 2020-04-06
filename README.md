@@ -1,5 +1,7 @@
 # CNNs-with-TensorFlow
-Differently abstract implementations of an exemplary convolutional neural network with TensorFlow.
+__Note:__ The implementations are using tensorflow 1, see [tensorflow-2-simple-examples](https://github.com/sgttwld/tensorflow-2-simple-examples) for tensorflow 2 examples.
+
+ Implementations of an exemplary convolutional neural network with TensorFlow 1 using APIs at different levels of abstraction.
 
 * [Convolutional layer from scratch](https://github.com/sgttwld/CNNs-with-tensorflow/blob/master/1_CNN_fromscratch.py): Convolutional neural network implementation with convolutional and pooling layers built from scratch with core TensorFlow.
 
